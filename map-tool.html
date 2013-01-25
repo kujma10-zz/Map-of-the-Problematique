@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<style type="text/css">
+			img {
+				display: block;
+				margin-left: auto;
+				margin-right: auto
+			}
+			img:nth-of-type(1) {
+				border-style: solid;
+				border-width: 5px;
+			}
+			img:nth-of-type(2) {
+				position: absolute;
+				left: 40%;
+				top: 30%;
+				filter: alpha(opacity=50);
+				-moz-opacity: 0.5;
+				-khtml-opacity: 0.5;
+				opacity: 0.5;
+			}
+		</style>
+		<meta charset="utf-8" />
+
+		<title>map-tool</title>
+	</head>
+
+	<body>
+		Base This:
+		<input type="url" name="base" value="http://upload.wikimedia.org/wikipedia/commons/4/43/Caucasus_290_BC_map_de_alt.png">
+		Scale This:
+		<input type="url" name="scale" value="http://upload.wikimedia.org/wikipedia/commons/e/eb/Caucasus_80_BC_map_alt_de.png">
+		Height:
+		<input type="text" name="h" value="800">
+		Width:
+		<input type="text" name="w" value="1000">
+		<button>
+			Go
+		</button>
+		<button id="l">left</button>
+		<button >></button>
+		<button >^</button>
+		<button >v</button>
+		<input name="slide" type="range" min="-5" max="5"/>
+		<input type="checkbox" name="chk">Ready<br>
+		
+		<img src = "" width="" height="" />
+		<img src = "" width="" height="" />
+		<textarea rows="4" cols="100" readonly="true" wrap='off'></textarea>
+		<button >Clear</button>
+		
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+		<script>
+			var snd = new Audio("beep2.wav");
+			$(document).ready(function() {
+				$("button:first").click(function() {
+					var src1 = $("[name='base']").val();
+					var h = $('[name="h"]').val();
+					var w = $('[name="w"]').val();
+					$("img:first").attr("src", "" + src1);
+					$("img:first").attr("height", "" + h);
+					$("img:first").attr("width", "" + w);
+
+					var src2 = $("[name='scale']").val();
+					console.log(src2)
+					$("img:last").attr("src", "" + src2);
+					$("img:last").attr("height", "" + h);
+					$("img:last").attr("width", "" + w);
+					$("img:last").draggable();
+					
+				});
+				$("button:not(:first):not(:last)").click(function() {
+					var val = $(this).text();
+					var h = $("img:last").attr("height");
+					var w = $("img:last").attr("width");
+					switch(val){
+						case 'left':
+							w--;
+							break;
+						case '>':
+							w++;
+							break;
+						case '^':
+							h--;
+							break;
+						case 'v':
+							h++;
+							break;
+						
+					}
+					$("img:last").attr("width", "" + w);
+					$("img:last").attr("height", "" + h);
+				});
+				
+				$("[name='slide']").bind('mousedown', function(e) {
+					$("[name='slide']").bind('mousemove', function(e) {
+						var asd = $(this).val();
+						rotate($("img:last"),asd);
+					});
+
+					$("[name='slide']").bind('mouseup', function() {
+						$("[name='slide']").unbind('mousemove')
+					});
+				});
+				
+				function rotate($img, deg){
+					$img.css({ WebkitTransform: 'rotate(' + deg + 'deg)'});
+				}
+				
+				$("[name='chk']").click(function(){
+					if($("[name='chk']").is(':checked')){
+	    				// checked
+	   					$("img:last").css({ opacity: 1 });
+	   					$("img:last").draggable('disable');
+	   					
+	   					$("img:last").bind('click', function(e){
+	   						$("img:last").one('click', function(e){
+	   							var obj = $("img:first").offset();
+	   							var x = parseInt(e.pageX - obj.left - 5);
+	   							var y = parseInt(e.pageY - obj.top - 5);
+	   							var sir = textarea.value;
+	   							textarea.value = ""+(x)+","+(y)+","+sir;
+	   							e.stopPropagation();
+								e.preventDefault();
+								snd.play();
+	   						})
+	   					})
+	    			}
+					else{
+	   					// unchecked
+	    				$("img:last").css({ opacity: 0.5 });
+	    				$("img:last").draggable('enable');
+	    				
+	    				$("img:last").bind('click', function(e){
+	   						$("img:last").unbind('click');
+	   					})
+	   				}
+				});
+				
+				var textarea = document.getElementsByTagName("textarea")[0];
+				$("button:last").click(function(){
+					textarea.value = "";
+				});
+				
+			});
+		</script>
+	</body>
+</html>
