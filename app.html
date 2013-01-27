@@ -35,7 +35,7 @@
 			imageObj.onload = function() {
         		context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
      		};	
-			imageObj.src = '/map-tools/pics/Caucasus_290_BC_map_de_alt.png';
+			imageObj.src = '/Map-of-the-Problematique/pics/Caucasus_290_BC_map_de_alt.png';
 			
 			// add click event on canvas and get coordinates
 			canvas.addEventListener("click", function(){
@@ -44,6 +44,34 @@
         		console.log(x);
         		console.log(y);
 			});
+			
+			/*
+			 * var pt = new Object();
+			 * encapsulates x and y: pt.x; pt.y.
+			 */
+			
+			function area(a,b,c){ // pts
+				return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+			}
+			
+			function intersect_1(a,b,c,d){ // ints
+				if(a>b) swap(a,b);
+				if(c>d) swap(c,d);
+				retrun Math.max(a,c) <= Math.min(b,d);
+			}
+			
+			function intersect (a,b,c,d){ // pts
+				return intersect_1(a.x,b.x,c.x,d.x)
+				&& intersect_1(a.y,b.y,c.y,d.y)
+				&& (area(a,b,c) * area(a,b,d) <= 0)
+				&& (area(c,d,a) * area(c,d,b) <= 0);
+			}
+			
+			function swap(a,b){ // ints
+				var tmp = a;
+				a = b;
+				b = tmp;
+			}
 		</script>
 	</body>
 </html>
