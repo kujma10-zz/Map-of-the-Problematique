@@ -81,18 +81,19 @@
 				var a = new point();
 				a.addX(x);a.addY(y);
 				var b = new point();
-				b.addX(0);b.addY(0);
+				b.addX(x);b.addY(0);
 				
 				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
 					var arr = twoDArr[i].coordinates;
 					var regionName = twoDArr[i].name;
+					console.log("exploring: "+regionName);
 					var counter = 0;
-					for (var j = 0; j < arr.length; j += 4) { // shevamowmot sazgvrebi
+					for (var j = 0; j < arr.length; j += 2) { // shevamowmot sazgvrebi
 						var cx = arr[j];
 						var cy = arr[j + 1];
-						var dx = arr[j + 2];
-						var dy = arr[j + 3];
-
+						var dx = arr[(j + 2)%arr.length];
+						var dy = arr[(j + 3)%arr.length];
+						console.log("c: "+cx+","+cy+" | d: "+dx+","+dy)
 						var c = new point();
 						c.addX(cx);c.addY(cy);
 						var d = new point();
