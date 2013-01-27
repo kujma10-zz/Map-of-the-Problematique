@@ -17,30 +17,20 @@
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 	</head>
-
+	
 	<body>
-		<div>
-			<header>
-				<h1>app</h1>
-			</header>
-			<nav>
-				<p>
-					<a href="/">Home</a>
-				</p>
-				<p>
-					<a href="/contact">Contact</a>
-				</p>
-			</nav>
-
-			<div>
-
-			</div>
-
-			<footer>
-				<p>
-					&copy; Copyright  by user
-				</p>
-			</footer>
-		</div>
+		<canvas id="myCanvas" width="1000" height="800" >
+				Canvas not supported
+		</canvas>
+		<script>
+			var canvas = document.getElementById('myCanvas');
+			var context=canvas.getContext('2d');
+			var imageObj = new Image();
+			imageObj.onload = function() {
+        		context.drawImage(imageObj, 0, 0, 1000, 800);
+     		};	
+			imageObj.src = '/map-tools/pics/Caucasus_290_BC_map_de_alt.png';
+			
+		</script>
 	</body>
 </html>
