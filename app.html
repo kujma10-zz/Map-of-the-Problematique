@@ -21,9 +21,12 @@
 		<canvas id="myCanvas" width="1000" height="800" >
 				Canvas not supported
 		</canvas>
+		<script src="http://code.jquery.com/jquery.min.js"></script>
 		<script>
-			$.getJSON("regions.json", function(data) {
-			    console.log(data);
+			var data;
+			$.getJSON("regions.json", function(d) {
+			    console.log(d);
+			    data = d;
 			    // data is a JavaScript object now. Handle it as such
 			});
 		
@@ -48,7 +51,31 @@
         		var	y = event.pageY - DISTANCE_Y - 8;
         		console.log(x);
         		console.log(y);
+        		console.log(data[0].info.regions[0].name)
+        		getRegion(x,y);
 			});
+			
+			function getRegions(x,y){
+				var 2dArr = data[0].info.regions;
+				for(var i=0;i<2dArr.length;i++){
+					var arr = 2dArr[i].coordinates;
+					var regionName = 2dArr[i].name;
+					for (var j=0; j < arr.length; j+=4) {
+						var cx = arr[j];
+						var cy = arr[j+1];
+						var dx = arr[j+2];
+						var dy = arr[j+3];
+						
+						var a = new Object();
+						
+						
+						var counter = 0;
+						if(intersect(x,y,xi,yi) == true){
+							counter++;
+						}
+					};
+				}
+			}
 			
 			/*
 			 * var pt = new Object();
@@ -62,7 +89,7 @@
 			function intersect_1(a,b,c,d){ // ints
 				if(a>b) swap(a,b);
 				if(c>d) swap(c,d);
-				retrun Math.max(a,c) <= Math.min(b,d);
+				return Math.max(a,c) <= Math.min(b,d);
 			}
 			
 			function intersect (a,b,c,d){ // pts
