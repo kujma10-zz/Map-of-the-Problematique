@@ -57,13 +57,17 @@
 				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
 					var arr = twoDArr[i].coordinates;
 					var regionName = twoDArr[i].name;
-					for (var j = 0; j < arr.length; j+=2) {
+					for (var j = 0; j < arr.length; j+=4) {
 						//console.log(arr[j] + " and " + arr[j+1]);
 						context.beginPath();
-						context.arc(arr[j], arr[j+1], 2, 0, 2 * Math.PI, false);
-						context.fillStyle = 'green';
+						
+						
+						context.moveTo(arr[j], arr[j+1]);
+						context.lineTo(arr[j+2],arr[j+3]);
+						context.closePath();
+						context.fillStyle = 'black';
 					    context.fill();
-					    context.lineWidth = 5;
+					    context.lineWidth = 4;
 					    context.strokeStyle = '#003300';
 					    context.stroke();
 					}
