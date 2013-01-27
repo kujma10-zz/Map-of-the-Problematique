@@ -22,6 +22,11 @@
 				Canvas not supported
 		</canvas>
 		<script>
+			$.getJSON("regions.json", function(data) {
+			    console.log(data);
+			    // data is a JavaScript object now. Handle it as such
+			});
+		
 			// constants
 			var IMAGE_WIDTH = 1000;
 			var IMAGE_HEIGHT = 800;
