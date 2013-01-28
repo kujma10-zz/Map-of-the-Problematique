@@ -24,7 +24,7 @@
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script>
 		var regionInd = 0;
-		var nullConstant = "chemi yle";
+		var nullRegion = "chemi yle";
 		var data;
 		$.getJSON("regions.json", function(d) {
 			data = d;
@@ -63,7 +63,7 @@
 			canvas.width = canvas.width;
 			context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
 			context.save();
-			if (region != nullConstant) {
+			if (region != nullRegion) {
 				var twoDArr = data[regionInd].info.regions;
 				for (var i = 0; i < twoDArr.length; i++) {
 					var regionName = twoDArr[i].name;
@@ -72,7 +72,7 @@
 						
 						context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
 						context.globalAlpha = 0.7;
-						context.fillRect(0, 0, canvas.width, canvas.height);
+						context.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 						context.beginPath();
 						context.moveTo(arr[0], arr[1]);
 						for (var j = 2; j < arr.length; j += 2) {
@@ -89,6 +89,9 @@
 		}
 		
 		function displayHistory(region){
+			if(region == nullRegion){
+				return;
+			}
 			var twoDArr = data[regionInd].info.regions;
 			var history;
 			for(var i=0;i<twoDArr.length;i++){
@@ -98,9 +101,8 @@
 					break;
 				}
 			}
-			context.font = "bold 12px sans-serif";
-			context.fillText(history, 248, 43);
-			console.log(history)
+			context.font = "bold 18px sans-serif";
+			context.fillText(history, canvas.width-IMAGE_WIDTH, 43);
 		}
 
 		function getRegion(x, y) {
@@ -137,7 +139,7 @@
 					return regionName;
 				}
 			}
-			return nullConstant;
+			return nullRegion;
 		}
 
 		function area(a, b, c) {// pts
