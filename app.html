@@ -56,6 +56,7 @@
 			var regionName = getRegion(x, y);
 			fillRegion(regionName);
 			displayHistory(regionName);
+			displayBattles(regionName);
 		});
 
 		function fillRegion(region) {
@@ -87,7 +88,19 @@
 				}
 			}
 		}
-
+		function displayBattles(region){
+			var twoDArr = data[regionInd].info.regions;
+			for (var i = 0; i < twoDArr.length; i++) {
+				var regionName = twoDArr[i].name;
+					if (regionName == region) {
+						var battles = twoDArr[i].battles;
+						for(var j = 0; j < battles.length; j++){
+							console.log(battles[j].name);
+						}
+					}
+			}
+		}
+		
 		function displayHistory(region) {
 			if (region == nullRegion) {
 				return;
