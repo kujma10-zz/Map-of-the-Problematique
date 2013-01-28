@@ -20,170 +20,148 @@
 		<canvas id="myCanvas" width="1000" height="800" >
 			Canvas not supported
 		</canvas>
-		<script src="http://code.jquery.com/jquery.min.js"></script>
-		<script>
-			var data;
-			$.getJSON("regions.json", function(d) {
-				// console.log(d);
-				data = d;
-				// data is a JavaScript object now. Handle it as such
-			});
+	</body>
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script>
+		var nullConstant = "chemi yle";
+		var data;
+		$.getJSON("regions.json", function(d) {
+			data = d;
+		});
 
-			// constants
-			var IMAGE_WIDTH = 1000;
-			var IMAGE_HEIGHT = 800;
-			var DISTANCE_X = 0;
-			var DISTANCE_Y = 0;
-			var filled = false;
+		// constants
+		var IMAGE_WIDTH = 1000;
+		var IMAGE_HEIGHT = 800;
+		var DISTANCE_X = 0;
+		var DISTANCE_Y = 0;
+		var filled = false;
 
-			// add image on canvas
-			var canvas = document.getElementById('myCanvas');
-			var context = canvas.getContext('2d');
-			var imageObj = new Image();
-			imageObj.onload = function() {
-				context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
-			};
-			imageObj.src = '/Map-of-the-Problematique/pics/Caucasus_290_BC_map_de_alt.png';
+		// add image on canvas
+		var canvas = document.getElementById('myCanvas');
+		var context = canvas.getContext('2d');
+		var imageObj = new Image();
+		imageObj.onload = function() {
+			context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
+		};
+		imageObj.src = '/Map-of-the-Problematique/pics/Caucasus_290_BC_map_de_alt.png';
+		context.save();
 
-			// add click event on canvas and get coordinates
-			canvas.addEventListener("click", function() {
-				var x = event.pageX - DISTANCE_X - 8;
-				var y = event.pageY - DISTANCE_Y - 8;
-				// console.log(x);
-				// console.log(y);
-				// console.log(data[0].info.regions[0].name)
-				
-				/* draw region borders */
-				/*var twoDArr = data[0].info.regions;
-				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
-					var arr = twoDArr[i].coordinates;
-					var regionName = twoDArr[i].name;
-					for (var j = 0; j < arr.length; j+=4) {
-						//console.log(arr[j] + " and " + arr[j+1]);
-						context.beginPath();
-						
-						
-						context.moveTo(arr[j], arr[j+1]);
-						context.lineTo(arr[j+2],arr[j+3]);
-						context.closePath();
-						context.fillStyle = 'black';
-					    context.fill();
-					    context.lineWidth = 4;
-					    context.strokeStyle = '#003300';
-					    context.stroke();
-					}
-				}
-				*/
-				//console.log(getRegion(x, y));
-				fillRegion(getRegion(x, y));
-			});
-			
-			function fillRegion(region){
-				console.log(region);
+		// add click event on canvas and get coordinates
+		canvas.addEventListener("click", function() {
+			var x = event.pageX - DISTANCE_X - 8;
+			var y = event.pageY - DISTANCE_Y - 8;
+			fillRegion(getRegion(x, y));
+		});
+
+		function fillRegion(region) {
+			context.restore();
+			context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
+			context.save();
+			if (region != nullConstant) {
 				var twoDArr = data[0].info.regions;
-				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
+				for (var i = 0; i < twoDArr.length; i++) {
 					var regionName = twoDArr[i].name;
-					if(regionName === region){
-						if(filled == true){
-							//clear and redraw
-						} 
+					if (regionName == region) {
 						var arr = twoDArr[i].coordinates;
+						
+						context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
+						context.globalAlpha = 0.7;
+						context.fillRect(0, 0, canvas.width, canvas.height);
 						context.beginPath();
 						context.moveTo(arr[0], arr[1]);
-						for (var j = 2; j < arr.length; j+=2) {
-							context.lineTo(arr[j],arr[j+1]);
+						for (var j = 2; j < arr.length; j += 2) {
+							context.lineTo(arr[j], arr[j + 1]);
 						}
 						context.closePath();
-						context.fillStyle = 'black';
 						context.clip();
-						context.fill();
-						filled = true;
-						return;
-										
-						
-					} else if(i == twoDArr.length -1){
-						// clear and redraw 
-						
-						filled = false;
-						console.log("vshli");
-						//context.beginPath();
-						//context.save();
-						//context.setTransform(1, 0, 0, 1, 0, 0);
-						context.clearRect(0, 0, canvas.width, canvas.height);
-						//context.restore();
+						context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
+						context.globalAlpha = 1;
 					}
 				}
+			}else{
+				context.restore();
+				context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
+				context.save();
 			}
-			
-			function getRegion(x, y) {
-				var twoDArr = data[0].info.regions;
-				var a = new point();
-				a.addX(x);a.addY(y);
-				var b = new point();
-				b.addX(x);b.addY(0);
-				
-				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
-					var arr = twoDArr[i].coordinates;
-					var regionName = twoDArr[i].name;
-					var counter = 0;
-					for (var j = 0; j < arr.length; j += 2) { // shevamowmot sazgvrebi
-						var cx = arr[j];
-						var cy = arr[j + 1];
-						var dx = arr[(j + 2)%arr.length];
-						var dy = arr[(j + 3)%arr.length];
-						var c = new point();
-						c.addX(cx);c.addY(cy);
-						var d = new point();
-						d.addX(dx);d.addY(dy);
+		}
 
-						if (intersect(a, b, c, d) == true) {
-							counter++;
-						}
+		function getRegion(x, y) {
+			var twoDArr = data[0].info.regions;
+			var a = new point();
+			a.addX(x);
+			a.addY(y);
+			var b = new point();
+			b.addX(x);
+			b.addY(0);
+
+			for (var i = 0; i < twoDArr.length; i++) {// amovirchiot regioni
+				var arr = twoDArr[i].coordinates;
+				var regionName = twoDArr[i].name;
+				var counter = 0;
+				for (var j = 0; j < arr.length; j += 2) {// shevamowmot sazgvrebi
+					var cx = arr[j];
+					var cy = arr[j + 1];
+					var dx = arr[(j + 2) % arr.length];
+					var dy = arr[(j + 3) % arr.length];
+					var c = new point();
+					c.addX(cx);
+					c.addY(cy);
+					var d = new point();
+					d.addX(dx);
+					d.addY(dy);
+
+					if (intersect(a, b, c, d) == true) {
+						counter++;
 					}
-					
-					if((counter & 1) === 1){
-						return regionName;
-					}
 				}
-				return "chemi...";
-			}
 
-			function area(a, b, c) {// pts
-				return (b.a - a.a) * (c.b - a.b) - (b.b - a.b) * (c.a - a.a);
-			}
-
-			function intersect_1(a, b, c, d) {// ints
-				if (a > b){
-					var tmp = a;
-					a = b;
-					b = tmp;
+				if ((counter & 1) === 1) {
+					return regionName;
 				}
-				if (c > d){
-					var tmp = c;
-					c = d;
-					d = tmp;
-				}
-				return Math.max(a, c) <= Math.min(b, d);
 			}
+			return nullConstant;
+		}
 
-			function intersect(a, b, c, d) {// pts
-				return intersect_1(a.a, b.a, c.a, d.a) && intersect_1(a.b, b.b, c.b, d.b) && (area(a, b, c) * area(a, b, d) <= 0) && (area(c, d, a) * area(c, d, b) <= 0);
-			}
+		function area(a, b, c) {// pts
+			return (b.a - a.a) * (c.b - a.b) - (b.b - a.b) * (c.a - a.a);
+		}
 
-			/*
-			 * var pt = new Object();
-			 * encapsulates x and y: pt.a; pt.b.
-			 */
+		function intersect_1(a, b, c, d) {// ints
+			if (a > b) {
+				var tmp = a;
+				a = b;
+				b = tmp;
+			}
+			if (c > d) {
+				var tmp = c;
+				c = d;
+				d = tmp;
+			}
+			return Math.max(a, c) <= Math.min(b, d);
+		}
 
-			function point(){
-				this.a;
-				this.b;
+		function intersect(a, b, c, d) {// pts
+			return intersect_1(a.a, b.a, c.a, d.a) && intersect_1(a.b, b.b, c.b, d.b) && (area(a, b, c) * area(a, b, d) <= 0) && (area(c, d, a) * area(c, d, b) <= 0);
+		}
+
+		/*
+		 * var pt = new Object();
+		 * encapsulates x and y: pt.a; pt.b.
+		 */
+
+		function point() {
+			this.a
+			this.b
+		}
+
+
+		point.prototype = {
+			addX : function(x) {
+				this.a = x
+			},
+			addY : function(y) {
+				this.b = y
 			}
-			
-			point.prototype = {
-				addX: function(x){this.a = x}, 
-				addY: function(y){this.b = y}
-			}
-		</script>
-	</body>
+		}
+	</script>
 </html>
