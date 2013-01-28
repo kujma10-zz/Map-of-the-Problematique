@@ -39,7 +39,7 @@
 
 		// add image on canvas
 		var canvas = document.getElementById('myCanvas');
-		canvas.width  = window.innerWidth;
+		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		var context = canvas.getContext('2d');
 		var imageObj = new Image();
@@ -69,7 +69,7 @@
 					var regionName = twoDArr[i].name;
 					if (regionName == region) {
 						var arr = twoDArr[i].coordinates;
-						
+
 						context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
 						context.globalAlpha = 0.7;
 						context.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
@@ -87,22 +87,43 @@
 				}
 			}
 		}
-		
-		function displayHistory(region){
-			if(region == nullRegion){
+
+		function displayHistory(region) {
+			if (region == nullRegion) {
 				return;
 			}
+			context.restore();
 			var twoDArr = data[regionInd].info.regions;
 			var history;
-			for(var i=0;i<twoDArr.length;i++){
+			for (var i = 0; i < twoDArr.length; i++) {
 				var name = twoDArr[i].name;
-				if(name == region){
+				if (name == region) {
 					history = twoDArr[i].description;
 					break;
 				}
 			}
 			context.font = "bold 18px sans-serif";
-			context.fillText(history, canvas.width-IMAGE_WIDTH, 43);
+			console.log(history)
+			wrapText(history, IMAGE_WIDTH, 43, canvas.width-IMAGE_WIDTH, 15);
+		}
+
+		function wrapText(text, x, y, maxWidth, lineHeight) {
+			var words = text.split(' ');
+			var line = '';
+
+			for (var n = 0; n < words.length; n++) {
+				var testLine = line + words[n] + ' ';
+				var metrics = context.measureText(testLine);
+				var testWidth = metrics.width;
+				if (testWidth > maxWidth) {
+					context.fillText(line, x, y);
+					line = words[n] + ' ';
+					y += lineHeight;
+				} else {
+					line = testLine;
+				}
+			}
+			context.fillText(line, x, y);
 		}
 
 		function getRegion(x, y) {
