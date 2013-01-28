@@ -34,6 +34,7 @@
 			var IMAGE_HEIGHT = 800;
 			var DISTANCE_X = 0;
 			var DISTANCE_Y = 0;
+			var filled = false;
 
 			// add image on canvas
 			var canvas = document.getElementById('myCanvas');
@@ -53,7 +54,7 @@
 				// console.log(data[0].info.regions[0].name)
 				
 				/* draw region borders */
-				var twoDArr = data[0].info.regions;
+				/*var twoDArr = data[0].info.regions;
 				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
 					var arr = twoDArr[i].coordinates;
 					var regionName = twoDArr[i].name;
@@ -72,9 +73,46 @@
 					    context.stroke();
 					}
 				}
-				
-				console.log(getRegion(x, y));
+				*/
+				//console.log(getRegion(x, y));
+				fillRegion(getRegion(x, y));
 			});
+			
+			function fillRegion(region){
+				console.log(region);
+				var twoDArr = data[0].info.regions;
+				for (var i = 0; i < twoDArr.length; i++) { // amovirchiot regioni
+					var regionName = twoDArr[i].name;
+					if(regionName === region){
+						if(filled == true){
+							
+						} else {
+							console.log("shemovedi");
+							var arr = twoDArr[i].coordinates;
+							context.beginPath();
+							context.moveTo(arr[0], arr[1]);
+							for (var j = 2; j < arr.length; j+=2) {
+								context.lineTo(arr[j],arr[j+1]);
+							}
+							context.closePath();
+							context.fillStyle = 'black';
+							context.clip();
+							context.fill();
+							filled = true;
+							return;
+						}
+						
+					} else if(i == twoDArr.length -1){
+						filled = false;
+						console.log("vshli");
+						//context.beginPath();
+						//context.save();
+						//context.setTransform(1, 0, 0, 1, 0, 0);
+						context.clearRect(0, 0, canvas.width, canvas.height);
+						//context.restore();
+					}
+				}
+			}
 			
 			function getRegion(x, y) {
 				var twoDArr = data[0].info.regions;
