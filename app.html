@@ -76,12 +76,9 @@
 						context.clip();
 						context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
 						context.globalAlpha = 1;
+						break;
 					}
 				}
-			}else{
-				context.restore();
-				context.drawImage(imageObj, DISTANCE_X, DISTANCE_Y, IMAGE_WIDTH, IMAGE_HEIGHT);
-				context.save();
 			}
 		}
 
