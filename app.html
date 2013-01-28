@@ -24,7 +24,7 @@
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script>
 	
-		var clickDistance = 1;
+		var clickDistance = 4;
 		var regionInd = 0;
 		var nullRegion = "chemi yle";
 		var data;
@@ -130,10 +130,10 @@
 				var bx = arr[0];
 				var by = arr[1];
 				if(distance(x,y,bx,by)){
-					context.clearRect(IMAGE_WIDTH,0,canvas.width,canvas.height);
+					// context.clearRect(IMAGE_WIDTH,0,canvas.width,canvas.height);
 					var battleName = battleHistory[i].name;
 					var battleYear = battleHistory[i].year;
-					wrapText(battleName+'\n'+battleYear, IMAGE_WIDTH, 43, canvas.width - IMAGE_WIDTH, 15);
+					wrapText(battleName+'\n'+battleYear, x+10, y, canvas.width - IMAGE_WIDTH, 15);
 					break;
 				}
 			}
