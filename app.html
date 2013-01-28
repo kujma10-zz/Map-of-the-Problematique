@@ -23,6 +23,8 @@
 	</body>
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script>
+	
+		var clickDistance = 1;
 		var regionInd = 0;
 		var nullRegion = "chemi yle";
 		var data;
@@ -57,6 +59,7 @@
 			fillRegion(regionName);
 			displayHistory(regionName);
 			displayBattles(regionName);
+			displayBattleHistory(x, y,regionName);
 		});
 
 		function fillRegion(region) {
@@ -88,25 +91,61 @@
 				}
 			}
 		}
-		function displayBattles(region){
+
+		function displayBattles(region) {
 			var twoDArr = data[regionInd].info.regions;
 			for (var i = 0; i < twoDArr.length; i++) {
 				var regionName = twoDArr[i].name;
-					if (regionName == region) {
-						var battles = twoDArr[i].battles;
-						for(var j = 0; j < battles.length; j++){
-							console.log(battles[j].name);
-							var coords = battles[j].coordinates;
-							context.beginPath();
-							context.arc(coords[0], coords[1], 5, 0, 2 * Math.PI, false);
-							context.fillStyle = "rgb(255, 0, 0)";
-							context.fill();
-							//wrapText(battles[j].name, IMAGE_WIDTH, 150, canvas.width-IMAGE_WIDTH, 15);
-						}
+				if (regionName == region) {
+					var battles = twoDArr[i].battles;
+					for (var j = 0; j < battles.length; j++) {
+						console.log(battles[j].name);
+						var coords = battles[j].coordinates;
+						context.beginPath();
+						context.arc(coords[0], coords[1], 5, 0, 2 * Math.PI, false);
+						context.fillStyle = "rgb(255, 0, 0)";
+						context.fill();
 					}
+				}
 			}
 		}
 		
+		function displayBattleHistory(x,y,region){
+			if(region == nullRegion){
+				return;
+			}
+			var twoDArr = data[regionInd].info.regions;
+			var battleHistory;
+			for (var i = 0; i < twoDArr.length; i++) {
+				var name = twoDArr[i].name;
+					console.log(name+" "+region);
+				if (name == region) {
+					battleHistory = twoDArr[i].battles;
+					break;
+				}
+			}
+			
+			for (var i = 0; i < battleHistory.length; i++) {
+				var arr = battleHistory[i].coordinates;
+				var bx = arr[0];
+				var by = arr[1];
+				if(distance(x,y,bx,by)){
+					context.clearRect(IMAGE_WIDTH,0,canvas.width,canvas.height);
+					var battleName = battleHistory[i].name;
+					var battleYear = battleHistory[i].year;
+					wrapText(battleName+'\n'+battleYear, IMAGE_WIDTH, 43, canvas.width - IMAGE_WIDTH, 15);
+					break;
+				}
+			}
+		}
+		
+		function distance(x,y,bx,by){
+			var dist = Math.sqrt(Math.pow(x-bx,2)+Math.pow(y-by,2));
+			if(dist <= clickDistance){
+				return true;
+			}
+		}
+
 		function displayHistory(region) {
 			if (region == nullRegion) {
 				return;
@@ -122,8 +161,7 @@
 				}
 			}
 			context.font = "bold 18px sans-serif";
-			console.log(history)
-			wrapText(history, IMAGE_WIDTH, 43, canvas.width-IMAGE_WIDTH, 15);
+			wrapText(history, IMAGE_WIDTH, 43, canvas.width - IMAGE_WIDTH, 15);
 		}
 
 		function wrapText(text, x, y, maxWidth, lineHeight) {
