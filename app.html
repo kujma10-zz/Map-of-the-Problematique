@@ -96,6 +96,12 @@
 						var battles = twoDArr[i].battles;
 						for(var j = 0; j < battles.length; j++){
 							console.log(battles[j].name);
+							var coords = battles[j].coordinates;
+							context.beginPath();
+							context.arc(coords[0], coords[1], 5, 0, 2 * Math.PI, false);
+							context.fillStyle = "rgb(255, 0, 0)";
+							context.fill();
+							//wrapText(battles[j].name, IMAGE_WIDTH, 150, canvas.width-IMAGE_WIDTH, 15);
 						}
 					}
 			}
