@@ -85,24 +85,25 @@
 					var regionName = twoDArr[i].name;
 					if(regionName === region){
 						if(filled == true){
-							
-						} else {
-							console.log("shemovedi");
-							var arr = twoDArr[i].coordinates;
-							context.beginPath();
-							context.moveTo(arr[0], arr[1]);
-							for (var j = 2; j < arr.length; j+=2) {
-								context.lineTo(arr[j],arr[j+1]);
-							}
-							context.closePath();
-							context.fillStyle = 'black';
-							context.clip();
-							context.fill();
-							filled = true;
-							return;
+							//clear and redraw
+						} 
+						var arr = twoDArr[i].coordinates;
+						context.beginPath();
+						context.moveTo(arr[0], arr[1]);
+						for (var j = 2; j < arr.length; j+=2) {
+							context.lineTo(arr[j],arr[j+1]);
 						}
+						context.closePath();
+						context.fillStyle = 'black';
+						context.clip();
+						context.fill();
+						filled = true;
+						return;
+										
 						
 					} else if(i == twoDArr.length -1){
+						// clear and redraw 
+						
 						filled = false;
 						console.log("vshli");
 						//context.beginPath();
